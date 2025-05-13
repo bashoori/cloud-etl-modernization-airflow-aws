@@ -15,20 +15,23 @@ It simulates a modern, production-ready data engineering environment for ingesti
 ---
 
 ## ⚙️ Architecture Overview
-+————+        +——————+       +——————+
-| Mock API   | —–> | fetch_ads_data   | ––> | transform_ads.py |
-| (JSON Ads) |        |  (Airflow DAG)   |       +——————+
-+————+                                     |
-v
-+——————+
-| load_to_redshift |
-+——————+
-|
-v
-+––––––––––+
-| AWS Redshift Table |
-+––––––––––+
----
+
+```text
++------------+       +---------------------+       +---------------------+
+|  Mock API  | --->  |  fetch_ads_data     | --->  |  transform_ads.py   |
+| (JSON Ads) |       |  (Airflow DAG Task) |       | (Transforms to CSV) |
++------------+       +---------------------+       +---------------------+
+                                                 |
+                                                 v
+                                       +-------------------------+
+                                       |  load_to_redshift.py    |
+                                       | (Load to Redshift Table)|
+                                       +-------------------------+
+                                                 |
+                                                 v
+                                       +-------------------------+
+                                       |   AWS Redshift Table    |
+                                       +-------------------------+
 
 ## 🚀 Features
 
