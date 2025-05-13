@@ -1,0 +1,6 @@
+# airflow core dependencies
+Flask-Session==0.4.0
+pandas>=2.0.0
+numpy>=2.0.0
+boto3>=1.28.0
+psycopg2-binary>=2.9.0

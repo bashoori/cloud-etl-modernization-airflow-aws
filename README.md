@@ -1,79 +1,153 @@
-# Project: cloud-etl-modernization-airflow-aws
+# 🌩️ Cloud ETL Modernization with Apache Airflow & AWS
 
-## 🚀 Overview
-This project modernizes a legacy ETL pipeline using **Apache Airflow**, **AWS**, and **Python**. It demonstrates how to automate data ingestion from third-party APIs, transform the data, and store it in a cloud-native architecture (S3, Redshift). Inspired by a real-world pipeline refactor that reduced processing time by 40% and enabled real-time reporting across business teams.
-
----
-
-## 🧱 Architecture
-**Source**: Mock Ads API / JSON files  
-**Orchestration**: Apache Airflow  
-**Storage**: AWS S3 (raw layer), optionally Redshift (modeled layer)  
-**Transformation**: PySpark / Pandas  
-**Deployment**: GitHub Codespaces, Docker, CI/CD with GitHub Actions
+An end-to-end **ETL pipeline** project using **Apache Airflow** for workflow orchestration and **AWS (Redshift, S3)** for scalable cloud storage and data loading. This project simulates a modern, production-ready data engineering environment that ingests mock API data, transforms it, and loads it into a cloud data warehouse.
 
 ---
 
-## 📂 Directory Structure
-```
+## 📌 Purpose
+
+This project showcases:
+
+- How to orchestrate real-world ETL workflows using Airflow
+- Modular task design with Python operators
+- Cloud integration with AWS S3 and Redshift
+- Local development inside GitHub Codespaces using Docker and DevContainers
+
+---
+
+## ⚙️ Architecture Overview
+     +------------+        +------------------+       +------------------+
+     | Mock API   | -----> | Airflow DAG:     | ----> | transform_ads.py |
+     | (JSON Ads) |        | fetch_ads_data   |       +------------------+
+     +------------+                                     |
+                                                         v
+                                                  +------------------+
+                                                  | load_to_redshift |
+                                                  +------------------+
+                                                         |
+                                                         v
+                                                +--------------------+
+                                                | AWS Redshift Table |
+                                                +--------------------+
+
+ ---
+
+## 🧰 Tech Stack
+
+| Category                | Tools & Technologies                                                  |
+|-------------------------|-----------------------------------------------------------------------|
+| **Language**            | Python 3.9                                                            |
+| **Orchestration**       | Apache Airflow (v2.7.3)                                               |
+| **Environment**         | Docker + DevContainer + GitHub Codespaces                            |
+| **ETL Scripting**       | Custom Python scripts (`/scripts`) for ingestion, transformation     |
+| **Storage (Mocked)**    | AWS S3 (emulated via local directory), AWS Redshift (via placeholder) |
+| **Data Format**         | JSON (mock API), CSV (transformed), Pandas DataFrames                |
+| **Scheduler**           | Airflow's built-in scheduler & CLI-triggered DAGs                    |
+| **Development**         | VS Code + Remote Containers + GitHub                                 |
+
+---
+
+## 📂 Project Structure
 cloud-etl-modernization-airflow-aws/
-├── dags/
-│   ├── api_ingestion_dag.py          # DAG to ingest ads data into S3
-│   ├── data_cleanup_dag.py           # (to be implemented)
-│   └── model_refresh_dag.py          # (to be implemented)
-├── lambda/
-│   └── check_file_trigger.py         # (future: file-based Lambda trigger)
-├── scripts/
-│   ├── transform_ads_data.py         # Transforms raw ads data into KPIs
-│   └── load_to_redshift.py           # (future: Redshift load script)
-├── mock_data/
-│   └── ads_sample.json               # Sample mock input for local dev
-├── configs/
-│   └── connections.json              # Airflow connection templates (local)
-├── docker-compose.yml                # Local Airflow dev environment
-├── .github/workflows/ci-pipeline.yml# CI/CD pipeline via GitHub Actions
-├── README.md                         # You’re here
-```
+│
+├── .devcontainer/                # DevContainer setup for Codespaces
+│   ├── Dockerfile
+│   ├── devcontainer.json
+│   └── requirements.txt
+│
+├── dags/                         # Airflow DAGs
+│   └── api_ingestion_dag.py
+│
+├── mock_data/                    # Simulated API data
+│   └── ads_data.json
+│
+├── scripts/                      # ETL scripts
+│   ├── transform_ads_data.py
+│   └── load_to_redshift.py
+│
+├── docker-compose.yml           # Airflow service definitions
+└── README.md
 
 ---
 
-## ⚙️ Features
-- ✅ Modular Airflow DAGs for ingestion, transformation, and loading
-- ✅ Serverless ingestion with AWS Lambda & S3
-- ✅ Automated transformation using Pandas
-- ✅ Configurable to run locally or in the cloud
-- ✅ Version-controlled in GitHub Codespaces with CI/CD support
+## 📌 Notable Airflow DAGs
+
+This project includes modular Airflow DAGs designed for modern ETL workflows. Each DAG is focused on a specific stage of the data pipeline, from data ingestion to transformation and loading.
+
+### DAG: `api_ingestion_dag`
+
+An end-to-end DAG that orchestrates the entire pipeline:
+
+1. **Ingests** mock advertisement data (JSON) from a local mock source
+2. **Transforms** raw JSON into structured tabular format
+3. **Loads** cleaned data into AWS Redshift (or mock DB in development)
+
+#### Tasks Breakdown
+
+| Task ID            | Description                                | Operator       |
+|--------------------|--------------------------------------------|----------------|
+| `fetch_ads_data`   | Reads and parses JSON ad data              | PythonOperator |
+| `transform_ads`    | Cleans and structures the ads data         | PythonOperator |
+| `load_to_redshift` | Writes the transformed data to Redshift    | PythonOperator |
+
+#### DAG Config
+
+- **Schedule**: `@daily`
+- **Retries**: `1` (with delay)
+- **Owner**: `bita`
+- **Dependencies**: `transform_ads` depends on `fetch_ads_data`; `load_to_redshift` runs last.
 
 ---
 
-## 🧪 How to Run Locally
+## 🚀 Features
+
+- 🌀 Modular DAGs: `fetch_ads_data`, `transform_ads`, `load_to_redshift`
+- 🐳 Dockerized with Airflow 2.7 for easy reproducibility
+- 🧪 Devcontainer-ready for GitHub Codespaces
+- 📥 Mock API input via local files (mock_data)
+- 🧹 Transformation logic via Python scripts
+- 🔺 Cloud Output to AWS Redshift (simulated)
+
+---
+
+## ▶️ How to Run
+
+### Local Setup
+
 ```bash
-# Step 1: Clone the repo
-$ git clone https://github.com/yourusername/cloud-etl-modernization-airflow-aws
+git clone https://github.com/bashoori/cloud-etl-modernization-airflow-aws
+cd cloud-etl-modernization-airflow-aws
 
-# Step 2: Launch Airflow locally (requires Docker)
-$ docker-compose up -d
+# Launch Airflow using Docker Compose
+docker-compose up --build
 
-# Step 3: Trigger the DAG manually from the Airflow UI
-# (http://localhost:8080)
-```
+Then visit: http://localhost:8080
+	•	Default credentials: admin / admin (or use CLI to create)
 
----
+GitHub Codespaces (Recommended)
 
-## 📊 Example Output
-Sample output from `transform_ads_data.py`:
-```csv
-campaign_id,impressions,clicks,spend,date,ctr
-abc123,10000,345,123.45,2024-06-01,0.0345
-```
+Just open the Codespace and it will:
+	•	Start the container
+	•	Run Airflow migrations
+	•	Create admin user
+	•	Launch scheduler & webserver
 
----
+No setup needed!
 
-## 👤 Author
-**Bita Ashoori**  
-GitHub: [bashoori](https://github.com/bashoori)  
+⸻
 
----
+📈 Future Enhancements
+	•	Connect to real APIs (e.g. Facebook Ads, Google Analytics)
+	•	Replace SQLite with PostgreSQL for dev
+	•	Add dbt for transformations
+	•	Add data quality tests and email alerts
 
-## 📜 License
-MIT License. Feel free to fork, improve, and contribute!
+⸻
+
+🙋‍♀️ Author
+
+Bita Ashoori
+GitHub: bashoori
+LinkedIn: linkedin.com/in/bashoori
+
+💡 This project is part of my Data Engineering Portfolio
