@@ -1,0 +1,15 @@
+# ⚙️ Core Dependencies
+apache-airflow==2.7.3
+Flask-Session==0.4.0
+requests==2.31.0
+python-dotenv==1.0.1
+
+# 📊 Data Handling
+pandas==2.2.2
+numpy==2.0.0
+
+# ☁️ AWS Integration
+boto3==1.34.83
+
+# 🛢️ Database Drivers
+psycopg2-binary==2.9.9

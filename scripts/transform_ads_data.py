@@ -1,28 +1,34 @@
-#Purpose: Transforms raw ad data (e.g., calculates CTR) and outputs it as a CSV.
-
 import json
 import pandas as pd
 import os
 
-def transform_ads_data(input_path='mock_data/ads_sample.json', output_path='mock_data/ads_transformed.csv'):
-    # Load raw JSON ad data from the mock input file
-    with open(input_path, 'r') as f:
-        raw_data = json.load(f)
+def transform_ads():
+    raw_path = os.path.join("mock_data", "ads_data.json")
+    output_path = os.path.join("processed_data", "ads_transformed.csv")
 
-    # Normalize the JSON structure into a pandas DataFrame
-    if isinstance(raw_data, list):
-        df = pd.DataFrame(raw_data)
-    else:
-        df = pd.DataFrame([raw_data])
+    try:
+        # Load raw JSON data
+        with open(raw_path, 'r') as f:
+            ads_data = json.load(f)
 
-    # Calculate Click-Through Rate (CTR)
-    df['ctr'] = df['clicks'] / df['impressions']
+        df = pd.DataFrame(ads_data)
 
-    # Save the transformed data to a CSV file
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    df.to_csv(output_path, index=False)
-    print(f"Transformed data written to {output_path}")
+        # Basic transformation: Add CTR and CPC
+        df["ctr"] = df["clicks"] / df["impressions"]
+        df["cpc"] = df["spend"] / df["clicks"]
 
-# Run the transformation if the script is executed directly
-if __name__ == '__main__':
-    transform_ads_data()
+        # Optional: Round the new columns
+        df["ctr"] = df["ctr"].round(4)
+        df["cpc"] = df["cpc"].round(2)
+
+        # Save to CSV
+        os.makedirs("processed_data", exist_ok=True)
+        df.to_csv(output_path, index=False)
+        print(f"✅ Transformed data written to {output_path}")
+
+    except Exception as e:
+        print(f"❌ Transformation failed: {e}")
+
+# To allow direct execution for local testing
+if __name__ == "__main__":
+    transform_ads()

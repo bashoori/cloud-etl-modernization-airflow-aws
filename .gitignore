@@ -1,0 +1,12 @@
+# Ignore environment variable files with sensitive credentials
+.env
+.env.*
+!.env.template
+
+# Optional: Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Optional: Ignore Airflow logs and database files
+logs/
+airflow.db

@@ -1,0 +1,26 @@
+[
+  {
+    "ad_id": "001",
+    "campaign": "Winter Sale",
+    "impressions": 12000,
+    "clicks": 320,
+    "spend": 150.75,
+    "date": "2025-05-10"
+  },
+  {
+    "ad_id": "002",
+    "campaign": "Spring Launch",
+    "impressions": 9500,
+    "clicks": 280,
+    "spend": 132.50,
+    "date": "2025-05-11"
+  },
+  {
+    "ad_id": "003",
+    "campaign": "Summer Promo",
+    "impressions": 17800,
+    "clicks": 460,
+    "spend": 210.90,
+    "date": "2025-05-12"
+  }
+]
