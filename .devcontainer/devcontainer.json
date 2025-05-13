@@ -1,0 +1,14 @@
+{
+  "name": "Airflow ETL",
+  "dockerFile": "Dockerfile",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "forwardPorts": [8080],
+  "postCreateCommand": "airflow db init && airflow users create --username admin --firstname Bita --lastname Ashoori --role Admin --email admin@example.com --password admin"
+}
