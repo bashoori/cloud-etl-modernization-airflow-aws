@@ -16,6 +16,7 @@ This project showcases:
 ---
 
 ## ⚙️ Architecture Overview
+```
      +------------+        +------------------+       +------------------+
      | Mock API   | -----> | Airflow DAG:     | ----> | transform_ads.py |
      | (JSON Ads) |        | fetch_ads_data   |       +------------------+
@@ -29,7 +30,7 @@ This project showcases:
                                                 +--------------------+
                                                 | AWS Redshift Table |
                                                 +--------------------+
-
+```
  ---
 
 ## 🧰 Tech Stack
@@ -48,6 +49,7 @@ This project showcases:
 ---
 
 ## 📂 Project Structure
+```
 cloud-etl-modernization-airflow-aws/
 │
 ├── .devcontainer/                # DevContainer setup for Codespaces
@@ -67,7 +69,7 @@ cloud-etl-modernization-airflow-aws/
 │
 ├── docker-compose.yml           # Airflow service definitions
 └── README.md
-
+```
 ---
 
 ## 📌 Notable Airflow DAGs
